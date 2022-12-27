@@ -9,11 +9,31 @@
 }
   
 @tailwind base;
-@tailwind components;
-@tailwind utilities;
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: white;
+}
+
+*::-webkit-scrollbar {
+  width: 15px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(230, 231, 240, 0.4);
+  border-radius: 15px;
+}
 
 body {
     font-family: 'Manrope';
     background-color: var(--background-color);
     color: var(--text-color);
 }
+
+@tailwind components;
+@tailwind utilities;
