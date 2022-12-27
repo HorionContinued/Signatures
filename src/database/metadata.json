@@ -1,0 +1,8 @@
+{
+    "Player::attack": {
+        "description": "Attack the given entity."
+    },
+    "Actor::move": {
+        "description": "Move the entity to the given position."
+    }
+}
