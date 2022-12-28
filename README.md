@@ -1,38 +1,25 @@
-# create-svelte
+# Signatures 🤗
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+This project is an effort to make modding Minecraft: Bedrock Edition easier.\
+Please note that signatures/offsets on this website are generated automatically. There is a chance of them not working. Please do not rely on this and only use this for reference and learning purposes.
 
-## Creating a project
+## Contributing
+If you'd like to help with this project, there are two ways you can do that:
 
-If you're seeing this, you've probably already done this step. Congrats!
+**1. Website Feature Updates**\
+If you're sufficient in Svelte/Typescript development, feel free to add features you find missing! Just [open a pull request](https://github.com/HorionContinued/sigs/pulls) and we'll review it right away.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+**2. Documenting functions**\
+We're currently documenting functions/classes to make it easier for developers to find out what something is doing.\
+You can help with that by opening a pull request with updated [metadata](/src/database/metadata.json)!\
+Metadata is currently just the descriptions, but we aim for adding more useful properties later on.
+If you want add a new description for an entry, create a new json object with the entry's name as key.\
+Example:
+```json
+    "SomeClass::SomeNewFunction": {
+        "description": "This amazing function does amazing stuff!"
+    }
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Help
+If you need help with something, feel free to join our [discord server](https://horion.download/discord).

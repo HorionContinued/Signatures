@@ -9,8 +9,10 @@
         signature: string;
         offset: number;
         voffset: number;
+        refoffset: number;
         isClass: boolean;
         isVirtual: boolean;
+        isVtable: boolean;
         symbol?: string;
     }
 
@@ -33,8 +35,10 @@
             signature: entry.signature,
             offset: entry.offset,
             voffset: entry.voffset,
+            refoffset: entry.refoffset,
             isClass: entry.isclass === 1,
             isVirtual: entry.isvirtual === 1,
+            isVtable: entry.isvtable,
             symbol: entry.symbol
         }
     }
