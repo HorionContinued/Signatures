@@ -6,9 +6,9 @@
         name: string;
         description?: string;
         type: EntryType;
-        signature: string;
+        signature?: string;
+        voffset?: number;
         offset: number;
-        voffset: number;
         refoffset: number;
         isClass: boolean;
         isVirtual: boolean;

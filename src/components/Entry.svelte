@@ -1,6 +1,5 @@
 <script lang="ts">
     import Modal, { bind } from 'svelte-simple-modal';
-    import { faWrench } from '@fortawesome/free-solid-svg-icons';
     import { writable } from 'svelte/store';
 
     import type { EntryData } from '../model/EntryData.svelte';

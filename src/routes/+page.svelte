@@ -16,16 +16,19 @@
 		useExtendedSearch: true
     });
 
+	let searchResults = all;
+	$: searchResults = $searchTermStore.length > 0 ? fuse.search($searchTermStore).map(v => v.item) : all;
+
 	let showNotice = true;
 </script>
 
 <svelte:head>
-	<title>Signatures for {all.length} functions 🤗</title>
+	<title>Signatures for {searchResults.length} functions 🤗</title>
 </svelte:head>
 
 <div class="flex m-8">
 	<div class="flex-1">
-		<h1 class="text-4xl">Signatures for {all.length} functions 🤗</h1>
+		<h1 class="text-4xl">Signatures for {searchResults.length} functions 🤗</h1>
 	</div>
 	<div class="flex justify-end items-center">
 		<a href="https://horion.download/discord"><Fa icon={faDiscord} size="2x"/></a>
@@ -54,20 +57,10 @@
 		</span>
 	</div>
 	<div style="height: calc(100vh - {showNotice ? 330 : 195 }px);">
-		{#if $searchTermStore.length > 0}
-			{#await fuse.search($searchTermStore)}
-				<p>Loading...</p>
-			{:then searchResults}
-				{#if searchResults.length === 0}
-					<div class="text-center">No results</div>
-				{:else}
-					<VirtualList items={searchResults.map(v => v.item)} let:item>
-						<Function entry={item} />
-					</VirtualList>
-				{/if}
-			{/await}
+		{#if searchResults.length === 0}
+			<div class="text-center">No results</div>
 		{:else}
-			<VirtualList items={all} let:item>
+			<VirtualList items={searchResults} let:item>
 				<Function entry={item} />
 			</VirtualList>
 		{/if}
