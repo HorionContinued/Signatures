@@ -28,9 +28,9 @@
 		<h1 class="text-4xl">Signatures for {all.length} functions 🤗</h1>
 	</div>
 	<div class="flex justify-end items-center">
-		<a href="https://horion.download/discord" class=""><Fa icon={faDiscord} size="2x"/></a>
+		<a href="https://horion.download/discord"><Fa icon={faDiscord} size="2x"/></a>
 		<div class="w-5"/>
-		<a href="https://github.com/HorionContinued/sigs" class=""><Fa icon={faGithub} size="2x"/></a>
+		<a href="https://github.com/HorionContinued/sigs"><Fa icon={faGithub} size="2x"/></a>
 	</div>
 </div>
 
@@ -51,7 +51,7 @@
 		<input bind:value={$searchTermStore} placeholder="search for name, description or signature..." class="w-full placeholder-[var(--text-color)] bg-white bg-opacity-5 rounded-xl p-2 px-3">
 		<span class="absolute right-2 bottom-2 pointer-events-none">
 			<svg fill="none" stroke="var(--text-color)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-6 h-6"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-	  	</span>
+		</span>
 	</div>
 	<div style="height: calc(100vh - {showNotice ? 330 : 195 }px);">
 		{#if $searchTermStore.length > 0}
