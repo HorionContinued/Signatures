@@ -7,10 +7,12 @@
         cleanName: string;
         description?: string;
         type: EntryType;
+        class?: string;
         signature?: string;
         vOffset?: number;
         offset: number;
         refOffset: number;
+        refSize: number;
         isClass: boolean;
         isVirtual: boolean;
         isVtable: boolean;
@@ -35,10 +37,12 @@
             cleanName: cleanName,
             description: md?.description,
             type: entry.type as EntryType,
+            class: entry.classname,
             signature: entry.signature,
             vOffset: entry.voffset,
             offset: entry.offset,
             refOffset: entry.refoffset,
+            refSize: entry.refsize,
             isClass: entry.isclass === 1,
             isVirtual: entry.isvirtual === 1,
             isVtable: entry.isvtable,

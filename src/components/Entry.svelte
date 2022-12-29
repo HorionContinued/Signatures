@@ -9,6 +9,7 @@
     import EntryFull from './EntryFull.svelte';
     import Pill from './Pill.svelte';
 	import CopyField from './CopyField.svelte';
+	import LinkField from './LinkField.svelte';
 
     export let entry: EntryData;
 
@@ -16,7 +17,7 @@
     const showFull = () => modalStore.set(bind(EntryFull, { entry }));
 </script>
 
-<div class="mb-4 mr-4 p-4 bg-white bg-opacity-5 rounded-xl hover:bg-opacity-10 transition-all" on:click={showFull} on:keypress={showFull}>
+<div class="mb-4 mr-4 pb-2 p-4 bg-white bg-opacity-5 rounded-xl hover:bg-opacity-10 transition-all" on:click={showFull} on:keypress={showFull}>
     <div class="flex flex-row items-center space-x-1">
         <b class="text-lg">{entry.name}</b>
         {#if entry.isVtable} <Pill title="vtable" color="rebeccapurple"/> {/if}
@@ -26,6 +27,16 @@
         <Pill title="type: {EntryType[entry.type].toLowerCase()}" icon={faWrench} color="cornflowerblue"/>
     </div>
     {#if entry.description} <p>{entry.description}</p> {/if}
-    {#if entry.signature} <div class="my-1 -ml-1 max-w-3xl"><CopyField text={entry.signature}/></div> {/if}
-    {#if entry.vOffset} <div class="my-1 max-w-3xl flex items-center">Offset: <span class="w-2"/><CopyField text={entry.vOffset.toString()}/></div> {/if}
+    {#if entry.signature} <div class="my-1 -ml-1 max-w-2xl"><CopyField text={entry.signature}/></div> {/if}
+    {#if entry.vOffset && entry.vOffset != -1 && entry.class}
+        <div class="my-1 max-w-2xl flex items-center">
+            Index: <span class="w-2"/> <LinkField name={entry.class}/>+<CopyField text={entry.vOffset.toString()}/>
+        </div>
+    {/if}
+    {#if entry.refOffset && entry.refSize}
+        <div class="my-1 max-w-2xl flex items-center">
+            refOffset: <span class="w-2"/><CopyField text={entry.refOffset.toString()}/><span class="w-2"/>
+            refSize: <span class="w-2"/><CopyField text={entry.refSize.toString()}/>
+        </div>
+    {/if}
 </div>

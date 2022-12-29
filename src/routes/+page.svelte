@@ -37,12 +37,12 @@
 </script>
 
 <svelte:head>
-	<title>Signatures for {searchResults.length} functions 🤗</title>
+	<title>Signatures for {searchResults.length} functions {searchResults.length === 0 ? "😭" : "🤗"}</title>
 </svelte:head>
 
 <div class="flex m-8">
 	<div class="flex-1">
-		<h1 class="text-4xl">Signatures for {searchResults.length} functions 🤗</h1>
+		<h1 class="text-4xl">Signatures for {searchResults.length} functions {searchResults.length === 0 ? "😭" : "🤗"}</h1>
 	</div>
 	<div class="flex justify-end items-center">
 		<a href="https://horion.download/discord" aria-label="discord"><Fa icon={faDiscord} size="2x"/></a>
