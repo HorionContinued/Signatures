@@ -12,6 +12,7 @@
 
     async function link(event: Event) {
         event.stopPropagation();
+        if(!parent) return;
         // @ts-expect-error
         modalStore.set(bind(EntryFull, { entry: parent }))
     }
