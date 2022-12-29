@@ -1,17 +1,17 @@
 <script lang="ts">
 	import Fuse from 'fuse.js';
 	import VirtualList from '@sveltejs/svelte-virtual-list';
-	import Fa from 'svelte-fa/src/fa.svelte'
 	import { faGithub, faDiscord } from '@fortawesome/free-brands-svg-icons'
+	import Fa from 'svelte-fa'
+    import Modal, { bind } from 'svelte-simple-modal';
 	import { slide } from 'svelte/transition';
+	import { onMount } from 'svelte';
+	import { modalStore } from '../stores';
+
+	import { all } from '../model/EntryData.svelte';
 
 	import Entry from '../components/Entry.svelte';
 	import EntryFull from '../components/EntryFull.svelte';
-	import { all } from '../model/EntryData.svelte';
-	import { onMount } from 'svelte';
-    import Modal, { bind } from 'svelte-simple-modal';
-	import { writable } from 'svelte/store';
-	import { modalStore } from '../stores';
 
     let searchTerm = "";
 	const fuse = new Fuse(all, {
@@ -19,8 +19,7 @@
 		threshold: 0.25,
 		useExtendedSearch: true
     });
-
-	let searchResults = all;
+	let searchResults: typeof all;
 	$: searchResults = searchTerm.length > 0 ? fuse.search(searchTerm).map(v => v.item) : all;
 
 	let showNotice = true;
@@ -46,9 +45,9 @@
 		<h1 class="text-4xl">Signatures for {searchResults.length} functions 🤗</h1>
 	</div>
 	<div class="flex justify-end items-center">
-		<a href="https://horion.download/discord"><Fa icon={faDiscord} size="2x"/></a>
+		<a href="https://horion.download/discord" aria-label="discord"><Fa icon={faDiscord} size="2x"/></a>
 		<div class="w-5"/>
-		<a href="https://github.com/HorionContinued/sigs"><Fa icon={faGithub} size="2x"/></a>
+		<a href="https://github.com/HorionContinued/sigs" aria-label="github"><Fa icon={faGithub} size="2x"/></a>
 	</div>
 </div>
 
