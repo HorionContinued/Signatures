@@ -4,12 +4,13 @@
 
     export type EntryData = {
         name: string;
+        cleanName: string;
         description?: string;
         type: EntryType;
         signature?: string;
-        voffset?: number;
+        vOffset?: number;
         offset: number;
-        refoffset: number;
+        refOffset: number;
         isClass: boolean;
         isVirtual: boolean;
         isVtable: boolean;
@@ -26,16 +27,18 @@
 
     function toEntryData(entry: typeof functions[0] & typeof onames[0]): EntryData {
         const name = entry.demangledname || entry.name;
+        const cleanName = name.split("(")[0];
         // @ts-expect-error Typescript will throw an error here, but it's fine
-        const md: { description: string } = metadata[name.split("(")[0]];
+        const md: { description: string } = metadata[cleanName];
         return {
             name: name,
+            cleanName: cleanName,
             description: md?.description,
             type: entry.type as EntryType,
             signature: entry.signature,
+            vOffset: entry.voffset,
             offset: entry.offset,
-            voffset: entry.voffset,
-            refoffset: entry.refoffset,
+            refOffset: entry.refoffset,
             isClass: entry.isclass === 1,
             isVirtual: entry.isvirtual === 1,
             isVtable: entry.isvtable,

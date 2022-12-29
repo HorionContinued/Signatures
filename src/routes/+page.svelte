@@ -3,13 +3,17 @@
 	import VirtualList from '@sveltejs/svelte-virtual-list';
 	import Fa from 'svelte-fa/src/fa.svelte'
 	import { faGithub, faDiscord } from '@fortawesome/free-brands-svg-icons'
-	import { writable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
 
-	import Function from '../components/Entry.svelte';
+	import Entry from '../components/Entry.svelte';
+	import EntryFull from '../components/EntryFull.svelte';
 	import { all } from '../model/EntryData.svelte';
+	import { onMount } from 'svelte';
+    import Modal, { bind } from 'svelte-simple-modal';
+	import { writable } from 'svelte/store';
+	import { modalStore } from '../stores';
 
-    const searchTermStore = writable('');
+    let searchTerm = "";
 	const fuse = new Fuse(all, {
     	keys: ['name', 'description', 'signature'],
 		threshold: 0.25,
@@ -17,9 +21,20 @@
     });
 
 	let searchResults = all;
-	$: searchResults = $searchTermStore.length > 0 ? fuse.search($searchTermStore).map(v => v.item) : all;
+	$: searchResults = searchTerm.length > 0 ? fuse.search(searchTerm).map(v => v.item) : all;
 
 	let showNotice = true;
+
+	onMount(() => {
+		if (window.location.hash.length > 0) {
+			const entry = all.find(e => e.cleanName === window.location.hash.slice(1));
+			if (entry) {
+				// @ts-expect-error cba to type this
+				modalStore.set(bind(EntryFull, { entry }));
+				console.log(entry);
+			}
+		}
+	});
 </script>
 
 <svelte:head>
@@ -51,7 +66,7 @@
 		</div>
 	{/if}
 	<div class="mb-5 relative">
-		<input bind:value={$searchTermStore} placeholder="search for name, description or signature..." class="w-full placeholder-[var(--text-color)] bg-white bg-opacity-5 rounded-xl p-2 px-3">
+		<input bind:value={searchTerm} placeholder="search for name, description or signature..." class="w-full placeholder-[var(--text-color)] bg-white bg-opacity-5 rounded-xl p-2 px-3">
 		<span class="absolute right-2 bottom-2 pointer-events-none">
 			<svg fill="none" stroke="var(--text-color)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-6 h-6"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
 		</span>
@@ -61,8 +76,10 @@
 			<div class="text-center">No results</div>
 		{:else}
 			<VirtualList items={searchResults} let:item>
-				<Function entry={item} />
+				<Entry entry={item} />
 			</VirtualList>
 		{/if}
 	</div>
 </main>
+
+<Modal show={$modalStore}/>
