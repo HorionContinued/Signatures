@@ -64,7 +64,7 @@
 		</div>
 	{/if}
 	<div class="mb-5 relative">
-		<input bind:value={searchTerm} placeholder="search for name, description or signature..." class="w-full placeholder-[var(--text-color)] bg-white bg-opacity-5 rounded-xl p-2 px-3">
+		<input bind:value={searchTerm} placeholder="search for name, description or signature..." class="w-full placeholder-text-color bg-white bg-opacity-5 rounded-xl p-2 px-3">
 		<span class="absolute right-2 bottom-2 pointer-events-none">
 			<svg fill="none" stroke="var(--text-color)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-6 h-6"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
 		</span>
@@ -80,4 +80,12 @@
 	</div>
 </main>
 
-<Modal show={$modalStore}/>
+<Modal
+	show={$modalStore}
+	unstyled={true}
+	classBg="fixed top-0 left-0 w-screen h-screen flex flex-col justify-center bg-black/[0.4] backdrop-filter backdrop-blur"
+	classWindowWrap="m-10"
+	classWindow="max-w-2xl mx-auto rounded-xl shadow-md bg-background-color"
+	classContent="p-4"
+	closeButton={false}
+/>
