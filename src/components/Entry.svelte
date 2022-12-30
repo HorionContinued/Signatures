@@ -18,13 +18,14 @@
 </script>
 
 <div class="mb-4 mr-4 pb-2 p-4 bg-white bg-opacity-5 rounded-xl hover:bg-opacity-10 transition-all" on:click={showFull} on:keypress={showFull}>
-    <div class="flex flex-row items-center space-x-1">
-        <b class="text-lg">{entry.name}</b>
-        {#if entry.isVtable} <Pill title="vtable" color="rebeccapurple"/> {/if}
-        {#if entry.isClass} <Pill title="class" color="darkorange"/> {/if}
-        {#if entry.isVirtual} <Pill title="virtual" color="seagreen"/> {/if}
-
-        <Pill title="type: {EntryType[entry.type].toLowerCase()}" icon={faWrench} color="cornflowerblue"/>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-1">
+        <b class="max-w-4xl text-lg truncate">{entry.name}</b>
+        <div class="flex flex-row items-center space-x-1">
+            {#if entry.isVtable} <Pill title="vtable" color="rebeccapurple"/> {/if}
+            {#if entry.isClass} <Pill title="class" color="darkorange"/> {/if}
+            {#if entry.isVirtual} <Pill title="virtual" color="seagreen"/> {/if}
+            <Pill title="type: {EntryType[entry.type].toLowerCase()}" icon={faWrench} color="cornflowerblue"/>
+        </div>
     </div>
     {#if entry.description} <p>{entry.description}</p> {/if}
     {#if entry.signature} <div class="my-1 -ml-1 max-w-2xl"><CopyField text={entry.signature}/></div> {/if}

@@ -44,9 +44,8 @@
 	<div class="flex-1">
 		<h1 class="text-4xl">Signatures for {searchResults.length} functions {searchResults.length === 0 ? "😭" : "🤗"}</h1>
 	</div>
-	<div class="flex justify-end items-center">
+	<div class="flex justify-end items-center space-x-5">
 		<a href="https://horion.download/discord" aria-label="discord"><Fa icon={faDiscord} size="2x"/></a>
-		<div class="w-5"/>
 		<a href="https://github.com/HorionContinued/sigs" aria-label="github"><Fa icon={faGithub} size="2x"/></a>
 	</div>
 </div>

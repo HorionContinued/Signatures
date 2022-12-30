@@ -11,5 +11,5 @@
     {#if icon}
         <span class="mr-1"><Fa {icon}/></span>
     {/if}
-    <span class="text-sm">{title}</span>
+    <span class="text-sm whitespace-nowrap">{title}</span>
 </div>
