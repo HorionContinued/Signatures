@@ -54,7 +54,7 @@
         </div>
     {/if}
     <div class="my-2 max-w-2xl flex items-center">
-        {#if entry.isVirtual && entry.class && entry.vOffset}
+        {#if entry.isVirtual && entry.class && entry.vOffset !== undefined}
             <BackdropField> 
                 Index: <span class="w-2"/> <LinkField name={entry.class}/><span class="mx-1">+</span><CopyField text={entry.vOffset.toString()}/>
             </BackdropField>
