@@ -35,7 +35,7 @@
     };
 </script>
 
-<div class="mb-4 mr-4 px-4 py-1 bg-white bg-opacity-5 rounded-xl hover:bg-opacity-10 transition-all" style="cursor: pointer;" on:click={showFull} on:keypress={showFull}>
+<div class="mb-4 mr-4 px-4 py-1 bg-white bg-opacity-5 rounded-xl hover:bg-opacity-10 transition-all cursor-pointer"  on:click={showFull} on:keypress={showFull}>
     <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-1 my-2">
         <b class="max-w-4xl text-lg truncate">{entry.name}</b>
         <div class="flex flex-row items-center space-x-1">
@@ -47,7 +47,7 @@
     </div>
     {#if entry.description} <p>{entry.description}</p> {/if}
     {#if entry.signature} 
-        <div class="my-2 max-w-2xl" style="cursor:auto;" 
+        <div class="my-2 max-w-2xl cursor-auto"
             on:click={(e) => e.stopPropagation()} on:keypress={(e) => e.stopPropagation()}>
             <CopyField text={entry.signature}/>
         </div>
