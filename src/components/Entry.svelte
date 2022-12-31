@@ -10,11 +10,14 @@
     import Pill from './Pill.svelte';
 	import CopyField from './CopyField.svelte';
 	import LinkField from './LinkField.svelte';
+	import BackdropField from './BackdropField.svelte';
 
     export let entry: EntryData;
-
-    // @ts-expect-error cba to type this
-    const showFull = () => modalStore.set(bind(EntryFull, { entry }));
+    
+    const showFull = (e: Event) => {
+        // @ts-expect-error cba to type this
+        modalStore.set(bind(EntryFull, { entry }));
+    };
 
     const sizeToType = (size: number) => {
         switch (size){
@@ -32,8 +35,8 @@
     };
 </script>
 
-<div class="mb-4 mr-4 pb-2 p-4 bg-white bg-opacity-5 rounded-xl hover:bg-opacity-10 transition-all" on:click={showFull} on:keypress={showFull}>
-    <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-1">
+<div class="mb-4 mr-4 px-4 py-1 bg-white bg-opacity-5 rounded-xl hover:bg-opacity-10 transition-all" style="cursor: pointer;" on:click={showFull} on:keypress={showFull}>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-1 my-2">
         <b class="max-w-4xl text-lg truncate">{entry.name}</b>
         <div class="flex flex-row items-center space-x-1">
             {#if entry.isVtable} <Pill title="vtable" color="rebeccapurple"/> {/if}
@@ -43,20 +46,29 @@
         </div>
     </div>
     {#if entry.description} <p>{entry.description}</p> {/if}
-    {#if entry.signature} <div class="my-1 -ml-1 max-w-2xl"><CopyField text={entry.signature}/></div> {/if}
-    {#if entry.isVirtual && entry.class && entry.vOffset}
-        <div class="my-1 max-w-2xl flex items-center">
-            Index: <span class="w-2"/> <LinkField name={entry.class}/>+<CopyField text={entry.vOffset.toString()}/>
+    {#if entry.signature} 
+        <div class="my-2 max-w-2xl" style="cursor:auto;" 
+            on:click={(e) => e.stopPropagation()} on:keypress={(e) => e.stopPropagation()}>
+            <CopyField text={entry.signature}/>
         </div>
     {/if}
-    {#if entry.type == EntryType.REFERENCE}
-        <div class="my-1 max-w-2xl flex items-center">
-            refOffset: <span class="w-2"/><CopyField text={entry.refOffset.toString()}/><span class="w-2"/>
-            refSize: <span class="w-2"/><CopyField text={entry.refSize.toString()}/> 
-            {#if sizeToType(entry.refSize) !== undefined}
-                <span class="w-2"/>
-                <small> or </small><span class="w-2"/><CopyField text={`sizeof(${sizeToType(entry.refSize)})`}/> 
-            {/if}
-        </div>
-    {/if}
+    <div class="my-2 max-w-2xl flex items-center">
+        {#if entry.isVirtual && entry.class && entry.vOffset}
+            <BackdropField> 
+                Index: <span class="w-2"/> <LinkField name={entry.class}/><span class="mx-1">+</span><CopyField text={entry.vOffset.toString()}/>
+            </BackdropField>
+        {/if}
+        {#if entry.type == EntryType.REFERENCE}
+            <BackdropField>
+                refOffset: <span class="w-2"/><CopyField text={entry.refOffset.toString()}/>
+            </BackdropField>
+            <BackdropField>
+                refSize: <span class="w-2"/><CopyField text={entry.refSize.toString()}/> 
+                {#if sizeToType(entry.refSize) !== undefined}
+                    <span class="w-2"/>
+                    <small> or </small><span class="w-2"/><CopyField text={`sizeof(${sizeToType(entry.refSize)})`}/> 
+                {/if}
+            </BackdropField>
+        {/if}
+    </div>
 </div>
