@@ -6,7 +6,7 @@
         name: string;
         cleanName: string;
         description?: string;
-        type: EntryType;
+        resolveType: EntryResolveType;
         class?: string;
         signature?: string;
         vOffset?: number;
@@ -16,19 +16,21 @@
         isClass: boolean;
         isVirtual: boolean;
         isVtable: boolean;
+        isFunction: boolean;
         symbol?: string;
     }
 
-    export enum EntryType {
+    export enum EntryResolveType {
         NONE = 0,
         DIRECT = 1,
         FUNCTION = 2,
-        REFERENCE = 3,
-        VTABLE = 4
+        BY_REFERENCE = 3,
+        BY_VTABLE = 4
     }
 
     function toEntryData(entry: typeof functions[0] & typeof onames[0]): EntryData {
         const name = entry.demangledname || entry.name;
+        const isFunction = entry.demangledname !== undefined;
         const cleanName = name.split("(")[0];
         // @ts-expect-error Typescript will throw an error here, but it's fine
         const md: { description: string } = metadata[cleanName];
@@ -36,7 +38,7 @@
             name: name,
             cleanName: cleanName,
             description: md?.description,
-            type: entry.type as EntryType,
+            resolveType: entry.type as EntryResolveType,
             class: entry.classname,
             signature: entry.signature,
             vOffset: entry.voffset,
@@ -46,6 +48,7 @@
             isClass: entry.isclass === 1,
             isVirtual: entry.isvirtual === 1,
             isVtable: entry.isvtable,
+            isFunction,
             symbol: entry.symbol
         }
     }

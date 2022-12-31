@@ -4,7 +4,7 @@
     import { modalStore } from '../stores';
 
     import type { EntryData } from '../model/EntryData.svelte';
-    import { EntryType } from '../model/EntryData.svelte';
+    import { EntryResolveType } from '../model/EntryData.svelte';
 
     import EntryFull from './EntryFull.svelte';
     import Pill from './Pill.svelte';
@@ -39,10 +39,11 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-1 my-2">
         <b class="max-w-4xl text-lg truncate">{entry.name}</b>
         <div class="flex flex-row items-center space-x-1">
+            {#if entry.isFunction} <Pill title="function" color="crimson"/> {/if}
             {#if entry.isVtable} <Pill title="vtable" color="rebeccapurple"/> {/if}
             {#if entry.isClass} <Pill title="class" color="darkorange"/> {/if}
             {#if entry.isVirtual} <Pill title="virtual" color="seagreen"/> {/if}
-            <Pill title="type: {EntryType[entry.type].toLowerCase()}" icon={faWrench} color="cornflowerblue"/>
+            <Pill title="resolveType: {EntryResolveType[entry.resolveType].toUpperCase()}" icon={faWrench} color="cornflowerblue"/>
         </div>
     </div>
     {#if entry.description} <p>{entry.description}</p> {/if}
@@ -58,7 +59,7 @@
                 Index: <span class="w-2"/> <LinkField name={entry.class}/><span class="mx-1">+</span><CopyField text={entry.vOffset.toString()}/>
             </BackdropField>
         {/if}
-        {#if entry.type == EntryType.REFERENCE}
+        {#if entry.resolveType == EntryResolveType.BY_REFERENCE}
             <BackdropField>
                 refOffset: <span class="w-2"/><CopyField text={entry.refOffset.toString()}/>
             </BackdropField>
