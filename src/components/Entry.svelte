@@ -11,20 +11,23 @@
 	import CopyField from './CopyField.svelte';
 	import LinkField from './LinkField.svelte';
 	import BackdropField from './BackdropField.svelte';
+    import type Fuse from 'fuse.js';
+	import HighlightedText from './HighlightedText.svelte';
 
     export let entry: EntryData;
+    export let matches: ReadonlyArray<Fuse.FuseResultMatch>;
     
     const showFull = (e: Event) => {
         // @ts-expect-error cba to type this
         modalStore.set(bind(EntryFull, { entry }));
     };
-
-    
+    //const filteredMatches: ReadonlyArray<[Number, Number]> = matches == undefined ? [[0, 0]] : matches.filter(m => m.key !== undefined && m.key == "name").map(v => v.indices);
 </script>
 
 <div class="mb-4 mr-4 px-4 py-1 bg-white bg-opacity-5 rounded-xl hover:bg-opacity-10 transition-all cursor-pointer"  on:click={showFull} on:keypress={showFull}>
     <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-1 my-2">
-        <b class="max-w-4xl text-lg truncate">{entry.name}</b>
+        <b class="max-w-4xl text-lg truncate"><HighlightedText text={entry.name} matches={matches} /></b>
+        
         <div class="flex flex-row items-center space-x-1">
             {#if entry.isFunction} <Pill title="function" color="crimson"/> {/if}
             {#if entry.isVtable} <Pill title="vtable" color="rebeccapurple"/> {/if}

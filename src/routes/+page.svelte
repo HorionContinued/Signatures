@@ -12,15 +12,28 @@
 
 	import Entry from '../components/Entry.svelte';
 	import EntryFull from '../components/EntryFull.svelte';
+	import type EntryData from '../model/EntryData.svelte';
 
     let searchTerm = "";
 	const fuse = new Fuse(all, {
-    	keys: ['name', 'description', 'signature'],
+    	keys: ['name', 'description'],
 		threshold: 0.25,
+		includeMatches: true,
 		useExtendedSearch: true
     });
-	let searchResults: typeof all;
-	$: searchResults = searchTerm.length > 0 ? fuse.search(searchTerm).map(v => v.item) : all;
+	
+	type SearchResult = {
+		item: EntryData,
+		matches?: ReadonlyArray<Fuse.FuseResultMatch>
+	};
+
+	// @ts-expect-error
+	const allAsSR: SearchResult[] = all.map(v => {return {
+		item: v,
+		matches: []
+	}});
+	let searchResults: SearchResult[] = allAsSR;
+	$: searchResults = searchTerm.length > 0 ? fuse.search(searchTerm) : allAsSR;
 
 	let showNotice = true;
 
@@ -74,7 +87,7 @@
 			<div class="text-center">No results</div>
 		{:else}
 			<VirtualList items={searchResults} let:item>
-				<Entry entry={item} />
+				<Entry entry={item.item} matches={item.matches}/>
 			</VirtualList>
 		{/if}
 	</div>
