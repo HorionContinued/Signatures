@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { onDestroy, onMount } from "svelte";
 
-	import { EntryResolveType, type EntryData } from "../model/EntryData.svelte";
+	import type EntryData  from "../model/EntryData.svelte";
 
     import CopyField from "./CopyField.svelte";
     import LinkField from "./LinkField.svelte";
 	import BackdropField from "./BackdropField.svelte";
 	import Pill from "./Pill.svelte";
 	import { faWrench } from "@fortawesome/free-solid-svg-icons";
+
+    import { EntryResolveType } from "../model/EntryDataStructures.svelte";
 
     export let entry: EntryData;
 

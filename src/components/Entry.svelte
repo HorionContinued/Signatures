@@ -3,8 +3,7 @@
     import { faWrench } from '@fortawesome/free-solid-svg-icons';
     import { modalStore } from '../stores';
 
-    import type { EntryData } from '../model/EntryData.svelte';
-    import { EntryResolveType } from '../model/EntryData.svelte';
+    import type EntryData from '../model/EntryData.svelte'; 
 
     import EntryFull from './EntryFull.svelte';
     import Pill from './Pill.svelte';
@@ -13,10 +12,11 @@
 	import BackdropField from './BackdropField.svelte';
     import type Fuse from 'fuse.js';
 	import HighlightedText from './HighlightedText.svelte';
+    import { EntryResolveType } from '../model/EntryDataStructures.svelte';
 
     export let entry: EntryData;
     export let matches: ReadonlyArray<Fuse.FuseResultMatch>;
-    
+
     const showFull = (e: Event) => {
         // @ts-expect-error cba to type this
         modalStore.set(bind(EntryFull, { entry }));
@@ -46,7 +46,8 @@
     <div class="my-2 max-w-2xl flex items-center">
         {#if entry.isVirtual && entry.class && entry.vOffset !== undefined}
             <BackdropField> 
-                Index: <span class="w-2"/> <LinkField name={entry.class}/><span class="mx-1">+</span><CopyField text={entry.vOffset.toString()}/>
+                Index: <span class="w-2"/> <LinkField entry={entry}/><span class="mx-1">+</span><CopyField text={entry.vOffset.toString()}/>
+
             </BackdropField>
         {/if}
         {#if entry.resolveType == EntryResolveType.BY_REFERENCE}

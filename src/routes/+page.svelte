@@ -8,36 +8,46 @@
 	import { onMount } from 'svelte';
 	import { modalStore } from '../stores';
 
-	import { all } from '../model/EntryData.svelte';
-
 	import Entry from '../components/Entry.svelte';
 	import EntryFull from '../components/EntryFull.svelte';
-	import type EntryData from '../model/EntryData.svelte';
+	import type EntryData from '../model/EntryData.svelte'; 
+
+	const allPromise = import("../model/EntryData.svelte");
 
     let searchTerm = "";
-	const fuse = new Fuse(all, {
-    	keys: ['name', 'description'],
-		threshold: 0.25,
-		includeMatches: true,
-		useExtendedSearch: true
-    });
-	
 	type SearchResult = {
 		item: EntryData,
 		matches?: ReadonlyArray<Fuse.FuseResultMatch>
 	};
 
-	// @ts-expect-error
-	const allAsSR: SearchResult[] = all.map(v => {return {
-		item: v,
-		matches: []
-	}});
-	let searchResults: SearchResult[] = allAsSR;
-	$: searchResults = searchTerm.length > 0 ? fuse.search(searchTerm) : allAsSR;
+	
+	let allAsSR: SearchResult[] = [];
+	let fuse: Fuse<EntryData>;
 
+	allPromise.then((pkg) => {
+		let all = pkg.all;
+
+		// @ts-expect-error
+		fuse = new Fuse(all, {
+			keys: ['name', 'description'],
+			threshold: 0.25,
+			includeMatches: true,
+			useExtendedSearch: true
+		});
+
+		// @ts-expect-error
+		allAsSR = all.map(v => {return {
+			item: v,
+			matches: []
+		}});
+	})
+	
+	let searchResults: SearchResult[] = [];
+	$: searchResults = (searchTerm.length > 0 && fuse !== undefined) ? fuse.search(searchTerm) : allAsSR;
+	
 	let showNotice = true;
 
-	onMount(() => {
+	/*onMount(() => {
 		if (window.location.hash.length > 0) {
 			const entry = all.find(e => e.cleanName === window.location.hash.slice(1));
 			if (entry) {
@@ -46,7 +56,7 @@
 				console.log(entry);
 			}
 		}
-	});
+	});*/
 </script>
 
 <svelte:head>
@@ -83,7 +93,9 @@
 		</span>
 	</div>
 	<div style="height: calc(100vh - {showNotice ? 330 : 195 }px);">
-		{#if searchResults.length === 0}
+		{#if fuse === undefined}
+			<div class="text-center">Loading....</div>
+		{:else if searchResults.length === 0}
 			<div class="text-center">No results</div>
 		{:else}
 			<VirtualList items={searchResults} let:item>

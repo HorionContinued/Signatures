@@ -1,6 +1,7 @@
 <script context="module" lang="ts">
-    import { functions, onames } from '../database/functions.json';
     import metadata from '../database/metadata.json';
+    import { functions, onames} from '../database/functions.json'    
+    import { EntryResolveType } from './EntryDataStructures.svelte';
 
     export type EntryData = {
         name: string;
@@ -22,15 +23,7 @@
         symbol?: string;
     }
 
-    export enum EntryResolveType {
-        NONE = 0,
-        DIRECT = 1,
-        FUNCTION = 2,
-        BY_REFERENCE = 3,
-        BY_VTABLE = 4
-    }
-
-    function toEntryData(entry: typeof functions[0] & typeof onames[0]): EntryData {
+    function toEntryData(entry: any): EntryData {
         const name = entry.demangledname || entry.name;
         const isFunction = entry.demangledname !== undefined;
         const cleanName = name.split("(")[0];
