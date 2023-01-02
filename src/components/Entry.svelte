@@ -19,20 +19,7 @@
         modalStore.set(bind(EntryFull, { entry }));
     };
 
-    const sizeToType = (size: number) => {
-        switch (size){
-            case 1:
-                return "int8_t";
-            case 2:
-                return "int16_t";
-            case 4:
-                return "int32_t";
-            case 8:
-                return "int64_t";
-            default:
-                return undefined;
-        }
-    };
+    
 </script>
 
 <div class="mb-4 mr-4 px-4 py-1 bg-white bg-opacity-5 rounded-xl hover:bg-opacity-10 transition-all cursor-pointer"  on:click={showFull} on:keypress={showFull}>
@@ -65,9 +52,9 @@
             </BackdropField>
             <BackdropField>
                 refSize: <span class="w-2"/><CopyField text={entry.refSize.toString()}/> 
-                {#if sizeToType(entry.refSize) !== undefined}
+                {#if entry.refSizeType !== undefined}
                     <span class="w-2"/>
-                    <small> or </small><span class="w-2"/><CopyField text={`sizeof(${sizeToType(entry.refSize)})`}/> 
+                    <small> or </small><span class="w-2"/><CopyField text={`sizeof(${entry.refSizeType})`}/> 
                 {/if}
             </BackdropField>
         {/if}

@@ -5,6 +5,7 @@
     export type EntryData = {
         name: string;
         cleanName: string;
+        cppName?: string;
         description?: string;
         resolveType: EntryResolveType;
         class?: string;
@@ -13,6 +14,7 @@
         offset: number;
         refOffset: number;
         refSize: number;
+        refSizeType?: string;
         isClass: boolean;
         isVirtual: boolean;
         isVtable: boolean;
@@ -34,9 +36,31 @@
         const cleanName = name.split("(")[0];
         // @ts-expect-error Typescript will throw an error here, but it's fine
         const md: { description: string } = metadata[cleanName];
+
+        const sizeToType = (size: number) => {
+            switch (size){
+                case 1:
+                    return "int8_t";
+                case 2:
+                    return "int16_t";
+                case 4:
+                    return "int32_t";
+                case 8:
+                    return "int64_t";
+                default:
+                    return undefined;
+            }
+        };
+        const refSizeType = sizeToType(entry.refsize);
+        let cppName: string | undefined = entry.cpp_name;
+        if(cppName !== undefined && entry.classname !== undefined && entry.classname.length > 0){
+            cppName = cppName.replace(entry.classname+"::", "/*"+entry.classname+"::*/");
+        }
+
         return {
             name: name,
             cleanName: cleanName,
+            cppName,
             description: md?.description,
             resolveType: entry.type as EntryResolveType,
             class: entry.classname,
@@ -45,6 +69,7 @@
             offset: entry.offset,
             refOffset: entry.refoffset,
             refSize: entry.refsize,
+            refSizeType,
             isClass: entry.isclass === 1,
             isVirtual: entry.isvirtual === 1,
             isVtable: entry.isvtable,
