@@ -12,42 +12,26 @@
 	import EntryFull from '../components/EntryFull.svelte';
 	import type EntryData from '../model/EntryData.svelte'; 
 
-	const allPromise = import("../model/EntryData.svelte");
+	let all: EntryData[];
 
-    let searchTerm = "";
-	type SearchResult = {
-		item: EntryData,
-		matches?: ReadonlyArray<Fuse.FuseResultMatch>
-	};
-
-	
-	let allAsSR: SearchResult[] = [];
+	let searchTerm = '';
 	let fuse: Fuse<EntryData>;
-
-	allPromise.then((pkg) => {
-		let all = pkg.all;
-
-		// @ts-expect-error
-		fuse = new Fuse(all, {
+	$: if(all) fuse = new Fuse(all, {
 			keys: ['name', 'description'],
 			threshold: 0.25,
 			includeMatches: true,
 			useExtendedSearch: true
-		});
-
-		// @ts-expect-error
-		allAsSR = all.map(v => {return {
-			item: v,
-			matches: []
-		}});
-	})
+	});
 	
-	let searchResults: SearchResult[] = [];
-	$: searchResults = (searchTerm.length > 0 && fuse !== undefined) ? fuse.search(searchTerm) : allAsSR;
+	let searchResults: EntryData[];
+	$: if(fuse) searchResults = (searchTerm.length > 0) ? fuse.search(searchTerm).map(v => v.item) : all;
 	
 	let showNotice = true;
 
-	/*onMount(() => {
+	onMount(async () => {
+		let entrydata = await import("../model/EntryData.svelte")
+		all = await entrydata.get();
+
 		if (window.location.hash.length > 0) {
 			const entry = all.find(e => e.cleanName === window.location.hash.slice(1));
 			if (entry) {
@@ -56,16 +40,16 @@
 				console.log(entry);
 			}
 		}
-	});*/
+	});
 </script>
 
 <svelte:head>
-	<title>Signatures for {searchResults.length} functions {searchResults.length === 0 ? "😭" : "🤗"}</title>
+	<title>Signatures for {searchResults?.length || "many"} functions {searchResults?.length === 0 ? "😭" : "🤗"}</title>
 </svelte:head>
 
 <div class="flex m-8">
 	<div class="flex-1">
-		<h1 class="text-4xl">Signatures for {searchResults.length} functions {searchResults.length === 0 ? "😭" : "🤗"}</h1>
+		<h1 class="text-4xl">Signatures for {searchResults?.length || "many"} functions {searchResults?.length === 0 ? "😭" : "🤗"}</h1>
 	</div>
 	<div class="flex justify-end items-center space-x-5">
 		<a href="https://horion.download/discord" aria-label="discord"><Fa icon={faDiscord} size="2x"/></a>
@@ -93,13 +77,13 @@
 		</span>
 	</div>
 	<div style="height: calc(100vh - {showNotice ? 330 : 195 }px);">
-		{#if fuse === undefined}
+		{#if !all || !fuse}
 			<div class="text-center">Loading....</div>
 		{:else if searchResults.length === 0}
 			<div class="text-center">No results</div>
 		{:else}
 			<VirtualList items={searchResults} let:item>
-				<Entry entry={item.item} matches={item.matches}/>
+				<Entry entry={item}/>
 			</VirtualList>
 		{/if}
 	</div>

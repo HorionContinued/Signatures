@@ -1,8 +1,6 @@
 <script context="module" lang="ts">
     import metadata from '../database/metadata.json';
-    import { functions, onames} from '../database/functions.json'    
-    import { EntryResolveType } from './EntryDataStructures.svelte';
-
+    
     export type EntryData = {
         name: string;
         cleanName: string;
@@ -23,6 +21,21 @@
         symbol?: string;
     }
 
+    export enum EntryResolveType {
+        NONE = 0,
+        DIRECT = 1,
+        FUNCTION = 2,
+        BY_REFERENCE = 3,
+        BY_VTABLE = 4
+    }
+
+    export enum RefSizeType {
+        int8_t = 1,
+        int16_t = 2,
+        int32_t = 4,
+        int64_t = 8
+    }
+
     function toEntryData(entry: any): EntryData {
         const name = entry.demangledname || entry.name;
         const isFunction = entry.demangledname !== undefined;
@@ -30,23 +43,9 @@
         // @ts-expect-error Typescript will throw an error here, but it's fine
         const md: { description: string } = metadata[cleanName];
 
-        const sizeToType = (size: number) => {
-            switch (size){
-                case 1:
-                    return "int8_t";
-                case 2:
-                    return "int16_t";
-                case 4:
-                    return "int32_t";
-                case 8:
-                    return "int64_t";
-                default:
-                    return undefined;
-            }
-        };
-        const refSizeType = sizeToType(entry.refsize);
-        let cppName: string | undefined = entry.cpp_name;
-        if(cppName !== undefined && entry.classname !== undefined && entry.classname.length > 0){
+        const refSizeType = RefSizeType[entry.refsize]?.toLowerCase();
+        let cppName: string = entry.cpp_name;
+        if(cppName && entry.classname?.length > 0) {
             cppName = cppName.replace(entry.classname+"::", "/*"+entry.classname+"::*/");
         }
 
@@ -71,8 +70,12 @@
         }
     }
 
-    export const all: EntryData[] = 
-        // @ts-expect-error Disable type checking for this line
-        [...functions.map(toEntryData), ...onames.map(toEntryData)]
-        .sort((a, b) => a.name.localeCompare(b.name));
+    let all: EntryData[];
+    export async function get() {
+        if(all) return all;
+        const { functions, onames } = await import("../database/functions.json").then(r => r.default);
+        const entries = await Promise.all([...functions, ...onames].map(toEntryData));
+        all = entries;
+        return entries;
+    }
 </script>

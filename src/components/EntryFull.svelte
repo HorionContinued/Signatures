@@ -9,7 +9,7 @@
 	import Pill from "./Pill.svelte";
 	import { faWrench } from "@fortawesome/free-solid-svg-icons";
 
-    import { EntryResolveType } from "../model/EntryDataStructures.svelte";
+    import { EntryResolveType } from "../model/EntryData.svelte";
 
     export let entry: EntryData;
 
