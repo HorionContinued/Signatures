@@ -1,6 +1,7 @@
 <script lang="ts">
     import { bind } from 'svelte-simple-modal';
     import { faWrench } from '@fortawesome/free-solid-svg-icons';
+    import type Fuse from 'fuse.js';
     import { modalStore } from '../stores';
 
     import type EntryData from '../model/EntryData.svelte'; 
@@ -10,9 +11,9 @@
 	import CopyField from './CopyField.svelte';
 	import LinkField from './LinkField.svelte';
 	import BackdropField from './BackdropField.svelte';
-    import type Fuse from 'fuse.js';
+
 	import HighlightedText from './HighlightedText.svelte';
-    import { EntryResolveType } from '../model/EntryDataStructures.svelte';
+    import { EntryResolveType } from '../model/EntryData.svelte';
 
     export let entry: EntryData;
     export let matches: ReadonlyArray<Fuse.FuseResultMatch>;
@@ -26,7 +27,7 @@
 
 <div class="mb-4 mr-4 px-4 py-1 bg-white bg-opacity-5 rounded-xl hover:bg-opacity-10 transition-all cursor-pointer"  on:click={showFull} on:keypress={showFull}>
     <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-1 my-2">
-        <b class="max-w-4xl text-lg truncate"><HighlightedText text={entry.name} matches={matches} /></b>
+        <b class="max-w-4xl text-lg truncate"><HighlightedText text={entry.name} {matches}/></b>
         
         <div class="flex flex-row items-center space-x-1">
             {#if entry.isFunction} <Pill title="function" color="crimson"/> {/if}
@@ -46,7 +47,7 @@
     <div class="my-2 max-w-2xl flex items-center">
         {#if entry.isVirtual && entry.class && entry.vOffset !== undefined}
             <BackdropField> 
-                Index: <span class="w-2"/> <LinkField entry={entry}/><span class="mx-1">+</span><CopyField text={entry.vOffset.toString()}/>
+                Index: <span class="w-2"/> <LinkField name={entry.class}/><span class="mx-1">+</span><CopyField text={entry.vOffset.toString()}/>
 
             </BackdropField>
         {/if}

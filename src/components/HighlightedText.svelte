@@ -28,5 +28,5 @@
     }
 </style>
 {#each highlighted as high, i}
-<span class={high === true ? "highlighted" : ""}>{text.at(i)}</span>
+<span class={high ? "highlighted" : ""}>{text.at(i)}</span>
 {/each}
