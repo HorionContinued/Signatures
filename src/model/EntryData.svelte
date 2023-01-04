@@ -71,7 +71,7 @@
     }
 
     let all: EntryData[];
-    export async function get() {
+    export async function get(): Promise<EntryData[]> {
         if(all) return all;
         const { functions, onames } = await import("../database/functions.json").then(r => r.default);
         const entries = await Promise.all([...functions, ...onames].map(toEntryData));

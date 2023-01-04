@@ -4,7 +4,6 @@
     import Fa from 'svelte-fa';
     import { bind } from 'svelte-simple-modal'
     import { modalStore } from '../stores';
-	import Entry from './Entry.svelte';
     
     import EntryFull from './EntryFull.svelte'; 
 	import { onMount } from 'svelte';
